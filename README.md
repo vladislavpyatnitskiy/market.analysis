@@ -1,14 +1,15 @@
 # Financial Markets Analysis
+
+Welcome to the repository of "Financial Markets Analysis"!
+
+Here are collected scripts enabling to get various financial data, plots and analyses that may be useful for work in Finance and Investments.
+
+----------------------------------------------------
 ![](https://github.com/vladislavpyatnitskiy/market.analysis/blob/main/Plots/Bar%20Plot%20of%20Sectors%20by%20Market%20Cap.png?raw=true)
 #### Fig. 1. US Sectors by Market Cap
 ----------------------------------------------------
 ![](https://github.com/vladislavpyatnitskiy/market.analysis/blob/main/Plots/Portions%20of%20Sectors%20in%20Market%20Cap.png?raw=true)
 #### Fig. 2. US Market by Portions
-----------------------------------------------------
-Welcome to the repository of "Financial Markets Analysis"!
-
-Here are collected scripts enabling to get various financial data, plots and analyses that may be useful for work in Finance and Investments.
-
 ----------------------------------------------------
 ![](https://github.com/vladislavpyatnitskiy/market.analysis/blob/main/Plots/Pie%20Plot%20of%20Russian%20Market%20Cap%20by%20Levels.png?raw=true)
 #### Fig. 3. Russian Market by Market Cap Levels
