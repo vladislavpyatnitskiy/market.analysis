@@ -35,17 +35,27 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
                          rep("red3", sum(l < 0))), horiz = F, las = 2,
                  ylim = c(p.seq[1], p.seq[length(p.seq)]))
   
+  abline(h = 0) # Black Horizontal line at 0
   abline(v = plt, col = "grey", lty = 3) # Vertical grey lines
-  abline(h = p.seq, col = "grey", lty = 3) # Horizontal grey lines
+  abline(h = p.seq[-match(0, p.seq)],col="grey",lty=3) # Horizontal grey lines
   abline(h = mean(l), col = "blue", lwd = 3) # Mean line
   abline(h = median(l), col = "green", lwd = 3) # Median line
   
-  legend(x = "bottom", inset = c(0, -.4), cex = .85, bty = "n", horiz = T,
+  legend(x = "bottom", inset = c(0, -.25), cex = .85, bty = "n", horiz = T,
          legend = c((sprintf("Mean: %s %%", round(mean(l), 2))),
                     sprintf("Median: %s %%", round(median(l), 2))),
          col = c("blue", "green"), xpd = T, pch = 15)
   
-  axis(side = 4, at = p.seq, las = 1) # Right Y-axis
+  m <- round(min(l) * -1 + max(l),0)/10^(nchar(round(min(l) * -1 + max(l),0)))
+  
+  if (m > 0 && m < 1){ mn <- 1 * 10 ^ (nchar(m) - 3) }
+  
+  else if (m > 1 && m < 2){ mn <- 2 * 10 ^ (nchar(m) - 3) }
+  
+  else if (m > 2 && m < 5){ mn <- 5 * 10 ^ (nchar(m) - 3) }
+  
+  axis(side = 2, las = 1, at = seq(-99, 99, mn * 2)) # Axes
+  axis(side = 4, las = 1, at = seq(-100, 100, mn)) # Axes
   
   par(mar = c(8, 4, 3, 4)) # Define borders of the plot
   
