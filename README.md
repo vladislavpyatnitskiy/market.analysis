@@ -19,3 +19,6 @@ Here are collected scripts enabling to get various financial data, plots and ana
 ----------------------------------------------------
 ![](https://github.com/vladislavpyatnitskiy/market.analysis/blob/main/Plots/Distribution%20of%20Russian%20Companies%20by%20Market%20Cap.png?raw=true)
 #### Fig. 5. Distribution of Russian Companies by Market Cap
+
+![](https://github.com/vladislavpyatnitskiy/market.analysis/blob/main/Plots/Bar%20Plot%20IMOEX%20Stocks%20Returns.png?raw=true)
+#### Fig. 6. IMOEX Stock Returns
