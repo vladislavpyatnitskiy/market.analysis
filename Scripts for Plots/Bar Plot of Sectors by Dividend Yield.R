@@ -2,23 +2,18 @@ library("rvest") # Library
 
 finviz.sectors.dividends.bar <- function(x){ # Bar Plot with Dividend Yields
   
-  s <- read_html(sprintf("https://finviz.com/%s", x))
+  y <- read_html(sprintf("https://finviz.com/%s", x)) %>%
+    html_nodes('table') %>% .[[8]] %>% html_nodes('tr') %>%
+    html_nodes('td') %>% html_text()
   
-  s.yahoo <- s %>% html_nodes('table') %>% .[[8]] -> tab # Assign Table 
-  
-  y <- tab %>% html_nodes('tr') %>% html_nodes('td') %>% html_text()
-  
-  d <- NULL # Data Frame with values
-  
-  for (n in 0:(length(y) / 11)){ d<-rbind(d,cbind(y[(2+n*11)],y[(5+n*11)])) }
-  
-  d <- d[-nrow(d),] # Reduce last column
+  d <- data.frame(y[seq(from = 2, to = length(y), by = 11)],
+                  y[seq(from = 5, to = length(y), by = 11)])
   
   rownames(d) <- d[,1] # Assign row names
   
   d <- subset(d, select = -c(1)) # Reduce excessive column
   
-  colnames(d) <- c("Dividend Yield (%)") 
+  colnames(d) <- c("Dividend Yield (%)") # Column name
   
   for (n in 1:nrow(d)){ # Reduce "%" from Market Cap column values
     
@@ -35,7 +30,7 @@ finviz.sectors.dividends.bar <- function(x){ # Bar Plot with Dividend Yields
   
   names(d) <- tickers
   
-  d <- sort(d, decreasing = F)
+  d <- sort(d, decreasing = F) # Sort in a descending way
   
   mx <- ceiling(round(max(d)) / 10 ^ (nchar(round(max(d))) - 1)) *
     10 ^ (nchar(round(max(d))) - 1) # Round maximum value up
@@ -44,11 +39,7 @@ finviz.sectors.dividends.bar <- function(x){ # Bar Plot with Dividend Yields
     10 ^ (nchar(round(min(d))) - 1) # Round maximum value up
   
   C = c("#466791","#60bf37","#953ada","#4fbe6c","#ce49d3","#a7b43d","#5a51dc",
-        "#d49f36","#552095","#507f2d","#db37aa","#84b67c","#a06fda","#df462a",
-        "#5b83db","#c76c2d","#4f49a3","#82702d","#dd6bbb","#334c22","#d83979",
-        "#55baad","#dc4555","#62aad3","#8c3025","#417d61","#862977","#bba672",
-        "#403367","#da8a6d","#a79cd4","#71482c","#c689d0","#6b2940","#d593a7",
-        "#895c8b","#bd5975")
+        "#d49f36","#552095","#507f2d","#db37aa","#84b67c","#a06fda","#df462a")
   
   B <- barplot(d, names.arg = names(d), horiz = T, las = 1, xlim = c(0, mx + 1),
                xpd = F, col = C, main = "Sectors by Dividend Yield (%)")
@@ -64,7 +55,7 @@ finviz.sectors.dividends.bar <- function(x){ # Bar Plot with Dividend Yields
   
   par(mar = c(4, 11, 4, 4)) # Define borders of the plot
   
-  legend(x = "bottom", inset = c(0, -.22), cex = .85, bty = "n", horiz = T,
+  legend(x = "bottom", inset = c(0, -.19), cex = .85, bty = "n", horiz = T,
          legend = c((sprintf("Mean: %s", round(mean(d), 2))),
                     sprintf("Median: %s", round(median(d), 2))),
          col = c("red", "green"), xpd = T, pch = 15)
