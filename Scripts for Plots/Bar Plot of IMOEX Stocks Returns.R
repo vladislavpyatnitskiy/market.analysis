@@ -8,12 +8,12 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
   l <- NULL # Get data of positive and negative returns
   
   for (n in 0:length(f)){ v <- gsub('["\n"]', '', gsub('["\t"]', '',f[7+17*n]))
-    
+  
     v <- as.character(read.fwf(textConnection(v), widths = c(nchar(v) - 1, 1),
-                              colClasses = "character")[1])
+                               colClasses = "character")[1])
     
     if (isTRUE(grepl("\\+", v))){ v <- as.numeric(gsub("\\+", "", v)) }
-    
+  
     l <- rbind.data.frame(l, cbind(f[2 + 17 * n], as.numeric(v))) }
   
   l <- l[apply(l, 1, function(x) all(!is.na(x))),] # Get rid of NA
@@ -30,11 +30,8 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
   
   p.seq <- seq(from = ceiling(min(l) * -1) * -1, to = ceiling(max(l)), by = 1)
   
-  p <- read_html("https://smart-lab.ru/q/shares/") # Get info from website
-  
-  div <- p %>% html_nodes('table') %>% .[[1]] -> tab # Table
-  
-  f <- tab %>% html_nodes('tr') #
+  f <- read_html("https://smart-lab.ru/q/shares/") %>% html_nodes('table') %>%
+    .[[1]] %>% html_nodes('tr') #
   
   L <- NULL # Reorganise data into data frame
   
@@ -46,9 +43,9 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
                                colClasses = "character")[1])
     
     if (isTRUE(grepl("\\+", P))){ P <- as.numeric(gsub("\\+", "", P)) }
-  
-  L <- rbind.data.frame(L, cbind(d[3], d[7], P)) } # ticker, price & %
-  
+    
+    L <- rbind.data.frame(L, cbind(d[3], d[7], P)) } # ticker, price & %
+    
   plt <- barplot(l,names.arg=names(l),main="IMOEX Stocks Returns for Today (%)", 
                  col = c(rep("green4", length(l) - sum(l < 0)),
                          rep("red3", sum(l < 0))), horiz = F, las = 2,
@@ -69,14 +66,13 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
   
   m <- round(min(l) * -1 + max(l),0)/10^(nchar(round(min(l) * -1 + max(l),0)))
   
-  if (m > 0 && m < 1){ mn <- 1 * 10 ^ (nchar(m) - 4) }
+  i <- c(0, 1, 2, 5) # Calculate intervals for lines and axes
   
-  else if (m > 1 && m < 2){ mn <- 2 * 10 ^ (nchar(m) - 4) }
+  for (n in 1:length(i) - 1){ if (m > i[n] && m < i[n + 1]){
+    
+      mn <- i[n + 1] * 10 ^ (nchar(m) - 4) } else { next } }
   
-  else if (m > 2 && m < 5){ mn <- 5 * 10 ^ (nchar(m) - 4) }
-  
-  axis(side = 2, las = 1, at = p.seq, labels = p.seq) # Axes
-  axis(side = 4, las = 1, at = p.seq, labels = p.seq) # Axes
+  for (n in 1:2){ axis(side = 2*n, las=1, at=p.seq, labels=p.seq) } # Axes 
   
   par(mar = c(8, 4, 3, 4)) # Define borders of the plot
   
