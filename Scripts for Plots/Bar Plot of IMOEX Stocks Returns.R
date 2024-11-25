@@ -23,9 +23,7 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
   l <- l[order(-as.numeric(l[,2])), ] # Order in a descending way
   
   tickers <- l[,1] # Tickers
-  
   l <- as.numeric(l[,2]) # Returns values
-  
   names(l) <- tickers # Assign tickers to returns
   
   p.seq <- seq(from = ceiling(min(l) * -1) * -1, to = ceiling(max(l)), by = 1)
@@ -51,14 +49,17 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
                          rep("red3", sum(l < 0))), horiz = F, las = 2,
                  ylim = c(p.seq[1], p.seq[length(p.seq)]))
   
-  abline(h = 0) # Black Horizontal line at 0
   abline(v = plt, col = "grey", lty = 3) # Vertical grey lines
-  abline(h = p.seq[-match(0, p.seq)],col="grey",lty=3) # Horizontal grey lines
-  abline(h = mean(l), col = "blue", lwd = 3) # Mean line
-  abline(h = median(l), col = "green", lwd = 3) # Median line
-  abline(h = L[1,3], col = "purple", lwd = 3) # IMOEX
   
-  legend(x = "bottom", inset = c(0, -.25), cex = .85, bty = "n", horiz = T,
+  # Break even line, horizontal lines, Mean, Median and IMOEX values
+  nums = list(0, c(p.seq[-match(0, p.seq)]), mean(l), median(l), L[1,3])
+  cols <- c("black", "grey", "blue", "green", "purple") # Colours
+  lwds <- c(rep(1, 2), rep(3, 3)) # Width 
+  ltys <- c(1, 3, rep(1, 3)) # Type
+  
+  for (n in 1:5){ abline(h=nums[[n]], col=cols[n], lwd=lwds[n], lty=ltys[n]) }
+  
+  legend(x = "bottom", inset = c(0, -.35), cex = .85, bty = "n", horiz = T,
          legend = c((sprintf("Mean: %s %%", round(mean(l), 2))),
                     sprintf("Median: %s %%", round(median(l), 2)),
                     sprintf("%s: %s %%", L[1,1], L[1,3])),
