@@ -5,29 +5,26 @@ smartlab.bar.plt.marketcap <- function(y){ # Portfolio Securities by Market Cap
   l <- NULL # Store data here
   
   for (m in 1:length(y)){ v <- y[m] # For each ratio get Smartlab HTML
+  
+  d<-read_html(sprintf("https://smart-lab.ru/q/shares_fundamental/?field=%s",
+                       v)) %>% html_nodes('table') %>% .[[1]] %>%
+    html_nodes('tr') %>% html_nodes('td') %>% html_text()
+  
+  D <- NULL # Variable for Table with Name, Ticker and values
+  
+  for (n in 0:(length(d)/6)){ D <- rbind(D, cbind(d[(3+n*6)], d[(6+n*6)])) }
+  
+  D <- D[-nrow(D),] # Reduce last row
+  D[,2] <- gsub('["\n"]', '', gsub('["\t"]', '', D[,2]))
+  
+  for (n in 1:length(D)){ if (isTRUE(grepl(" ", D[n]))){
     
-    s<-read_html(sprintf("https://smart-lab.ru/q/shares_fundamental/?field=%s",
-                         v))
-    
-    tab <- s %>% html_nodes('table') %>% .[[1]] # Table substraction
-    
-    d <- tab %>% html_nodes('tr') %>% html_nodes('td') %>% html_text()
-    
-    D <- NULL # Variable for Table with Name, Ticker and values
-    
-    for (n in 0:(length(d)/6)){ D <- rbind(D, cbind(d[(3 + n * 6)],
-                                                    d[(6 + n * 6)])) }
-    D <- D[-nrow(D),] # Reduce last row
-    D[,2] <- gsub('["\n"]', '', gsub('["\t"]', '', D[,2]))
-    
-    for (n in 1:length(D)){ if (isTRUE(grepl(" ", D[n]))){
-      
       D[n] <- gsub(" ", "", D[n]) } } # Reduce gap in market cap
-    
-    colnames(D) <- c("Ticker", gsub("_", "/", toupper(y[m]))) # Column names
-    
-    if (is.null(l)){ l<-D } else { l<-merge(x=l,y=D,by="Ticker",all=T)} }# Join
-    
+  
+  colnames(D) <- c("Ticker", gsub("_", "/", toupper(y[m]))) # Column names
+  
+  if (is.null(l)){ l<-D } else { l <- merge(x=l,y=D,by="Ticker",all=T)} }# Join
+  
   if (isTRUE(l[1,1] == "")){ l <- l[-1,] } # Reduce empty row
   
   rownames(l) <- l[,1] # Move tickers to row names
@@ -57,7 +54,7 @@ smartlab.bar.plt.marketcap <- function(y){ # Portfolio Securities by Market Cap
     else if (m > 100 && m < 1000) { M <- rbind.data.frame(M, "Large-Cap") } # 4
     
     else { M <- rbind.data.frame(M, "Mega-Cap") } } # 5
-  
+      
   rownames(M) <- rownames(l)
   colnames(M) <- "Level" # Column Name
   
@@ -77,11 +74,11 @@ smartlab.bar.plt.marketcap <- function(y){ # Portfolio Securities by Market Cap
   
   a <- a / 10 ^ (nchar(a)) # Grey division lines 
   
-  if (a > 0 && a < 1){ mn <- 1 * 10 ^ (nchar(a) - 3) } # For 0 to 1 interval
+  i <- c(0, 1, 2, 5) # Calculate intervals for lines and axes
   
-  else if (a > 1 && a < 2){ mn <- 2 * 10 ^ (nchar(a) - 3) } # For 1 to 2 
-  
-  else if (a > 2 && a < 5){ mn <- 5 * 10 ^ (nchar(a) - 3) } # For 2 to 5
+  for (n in 1:length(i) - 1){ if (a > i[n] && a < i[n + 1]){
+    
+      mn <- i[n + 1] * 10 ^ (nchar(a) - 3) } else { next } }
   
   B <- barplot(df[,2], names.arg=df[,1], horiz=F, las=1, xpd=F, col=C,
                main = "Distribution of Public Companies by Market Cap Levels",
