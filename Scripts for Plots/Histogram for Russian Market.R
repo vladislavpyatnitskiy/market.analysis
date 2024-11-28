@@ -6,12 +6,9 @@ rus.hist.plt.mrk.cap <- function(x){ # Histogram with Market Cap values
   
   for (m in 1:length(x)){ v <- x[m] # For each ratio get Smartlab HTML
   
-    s<-read_html(sprintf("https://smart-lab.ru/q/shares_fundamental/?field=%s",
-                         v))
-    
-    tab <- s %>% html_nodes('table') %>% .[[1]]
-    
-    y <- tab %>% html_nodes('tr') %>% html_nodes('td') %>% html_text()
+    y<-read_html(sprintf("https://smart-lab.ru/q/shares_fundamental/?field=%s",
+                         v)) %>% html_nodes('table') %>% .[[1]] %>%
+      html_nodes('tr') %>% html_nodes('td') %>% html_text()
     
     D <- NULL # Variable for Table with Name, Ticker and values
     
@@ -22,7 +19,7 @@ rus.hist.plt.mrk.cap <- function(x){ # Histogram with Market Cap values
     
     for (n in 1:length(D)){ if (isTRUE(grepl(" ", D[n]))){
       
-        D[n] <- gsub(" ", "", D[n]) } } # Reduce gap in market cap
+      D[n] <- gsub(" ", "", D[n]) } } # Reduce gap in market cap
     
     colnames(D) <- c("Ticker", gsub("_", "/", toupper(x[m]))) # Column names
     
