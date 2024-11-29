@@ -6,23 +6,20 @@ smartlab.pie.plt.marketcap <- function(y){ # Portfolio Securities by Market Cap
   
   for (m in 1:length(y)){ v <- y[m] # For each ratio get Smartlab HTML
   
-    s<-read_html(sprintf("https://smart-lab.ru/q/shares_fundamental/?field=%s",
-                         v))
-    
-    tab <- s %>% html_nodes('table') %>% .[[1]]
-    
-    d <- tab %>% html_nodes('tr') %>% html_nodes('td') %>% html_text()
+    d<-read_html(sprintf("https://smart-lab.ru/q/shares_fundamental/?field=%s",
+                         v)) %>% html_nodes('table') %>% .[[1]] %>%
+      html_nodes('tr') %>% html_nodes('td') %>% html_text()
     
     D <- NULL # Variable for Table with Name, Ticker and values
     
-    for (n in 0:(length(d)/6)){ D <- rbind(D, cbind(d[(3 + n * 6)],
-                                                    d[(6 + n * 6)])) }
+    for (n in 0:(length(d)/6)){ D <- rbind(D, cbind(d[(3+n*6)], d[(6+n*6)])) }
+    
     D <- D[-nrow(D),] # Reduce last row
     D[,2] <- gsub('["\n"]', '', gsub('["\t"]', '', D[,2])) # Reduce \,n,t
     
     for (n in 1:length(D)){ if (isTRUE(grepl(" ", D[n]))){
       
-        D[n] <- gsub(" ", "", D[n]) } } # Reduce gap in market cap
+      D[n] <- gsub(" ", "", D[n]) } } # Reduce gap in market cap
     
     colnames(D) <- c("Ticker", gsub("_", "/", toupper(y[m]))) # Column names
     
@@ -57,7 +54,7 @@ smartlab.pie.plt.marketcap <- function(y){ # Portfolio Securities by Market Cap
     else if (m > 100 && m < 1000) { M <- rbind.data.frame(M, "Large-Cap") } # 4
     
     else { M <- rbind.data.frame(M, "Mega-Cap") } } # 5
-  
+    
   rownames(M) <- rownames(l)
   colnames(M) <- "Level" # Column Name
   
@@ -72,7 +69,7 @@ smartlab.pie.plt.marketcap <- function(y){ # Portfolio Securities by Market Cap
   for (n in 1:nrow(df)){ df[n,2] <- round(df[n,2] / S * 100, 2) }
   
   C = c("#466791","#df462a","#4fbe6c","#ce49d3","#a7b43d","#5a51dc")
-
+  
   pie(df[,2], labels=c(sprintf("%s %s%%", df[,1], df[,2])), col=C, radius=2.5,
       main = "Securities by Market Capitalisation Level in Russia") # Plot
 }
