@@ -13,9 +13,9 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
                                colClasses = "character")[1])
     
     if (isTRUE(grepl("\\+", v))){ v <- as.numeric(gsub("\\+", "", v)) }
-  
+    
     l <- rbind.data.frame(l, cbind(f[2 + 17 * n], as.numeric(v))) }
-  
+    
   l <- l[apply(l, 1, function(x) all(!is.na(x))),] # Get rid of NA
   
   colnames(l) <- c("Компания", "%") # Column names
@@ -25,8 +25,6 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
   tickers <- l[,1] # Tickers
   l <- as.numeric(l[,2]) # Returns values
   names(l) <- tickers # Assign tickers to returns
-  
-  p.seq <- seq(from = ceiling(min(l) * -1) * -1, to = ceiling(max(l)), by = 1)
   
   f <- read_html("https://smart-lab.ru/q/shares/") %>% html_nodes('table') %>%
     .[[1]] %>% html_nodes('tr') #
@@ -46,34 +44,24 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
     
   plt <- barplot(l,names.arg=names(l),main="IMOEX Stocks Returns for Today (%)", 
                  col = c(rep("green4", length(l) - sum(l < 0)),
-                         rep("red3", sum(l < 0))), horiz = F, las = 2,
-                 ylim = c(p.seq[1], p.seq[length(p.seq)]))
-  
-  abline(v = plt, col = "grey", lty = 3) # Vertical grey lines
+                         rep("red3", sum(l < 0))), horiz = F, las = 2)
   
   # Break even line, horizontal lines, Mean, Median and IMOEX values
-  nums = list(0, c(p.seq[-match(0, p.seq)]), mean(l), median(l), L[1,3])
-  cols <- c("black", "grey", "blue", "green", "purple") # Colours
-  lwds <- c(rep(1, 2), rep(3, 3)) # Width 
-  ltys <- c(1, 3, rep(1, 3)) # Type
+  nums = list(0, mean(l), median(l), L[1,3])
+  cols <- c("black", "blue", "green", "purple") # Colours
+  lwds <- c(1, rep(3, 3)) # Width 
+  ltys <- c(1, rep(1, 3)) # Type
   
-  for (n in 1:5){ abline(h=nums[[n]], col=cols[n], lwd=lwds[n], lty=ltys[n]) }
+  for (n in 1:4){ abline(h=nums[[n]], col=cols[n], lwd=lwds[n], lty=ltys[n]) }
   
-  legend(x = "bottom", inset = c(0, -.35), cex = .85, bty = "n", horiz = T,
+  legend(x="bottom", inset=c(0, -.3), cex=.85, bty="n", horiz=T, xpd=T, pch=15,
          legend = c((sprintf("Mean: %s %%", round(mean(l), 2))),
                     sprintf("Median: %s %%", round(median(l), 2)),
-                    sprintf("%s: %s %%", L[1,1], L[1,3])),
-         col = c("blue", "green", "purple"), xpd = T, pch = 15)
+                    sprintf("%s: %s %%", L[1,1], L[1,3])), col = cols[2:4])
   
-  m <- round(min(l) * -1 + max(l),0)/10^(nchar(round(min(l) * -1 + max(l),0)))
+  axis(side = 4, las = 2) # Right y-axis
   
-  i <- c(0, 1, 2, 5) # Calculate intervals for lines and axes
-  
-  for (n in 1:length(i) - 1){ if (m > i[n] && m < i[n + 1]){
-    
-      mn <- i[n + 1] * 10 ^ (nchar(m) - 4) } else { next } }
-  
-  for (n in 1:2){ axis(side = 2*n, las=1, at=p.seq, labels=p.seq) } # Axes 
+  grid(nx=NULL, ny=NULL, col = "grey", lty = "dotted", lwd = 1) # grid lines
   
   par(mar = c(8, 4, 3, 4)) # Define borders of the plot
   
