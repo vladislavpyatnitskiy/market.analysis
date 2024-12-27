@@ -8,7 +8,7 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
   l <- NULL # Get data of positive and negative returns
   
   for (n in 0:length(f)){ v <- gsub('["\n"]', '', gsub('["\t"]', '',f[7+17*n]))
-  
+    
     v <- as.character(read.fwf(textConnection(v), widths = c(nchar(v) - 1, 1),
                                colClasses = "character")[1])
     
@@ -52,6 +52,8 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
   lwds <- c(1, rep(3, 3)) # Width 
   ltys <- c(1, rep(1, 3)) # Type
   
+  abline(v = plt, col = "grey", lwd = 1, lty = 3) # grid lines
+  grid(nx = 1, ny = NULL, col = "grey", lty = "dotted", lwd = 1) 
   for (n in 1:4){ abline(h=nums[[n]], col=cols[n], lwd=lwds[n], lty=ltys[n]) }
   
   legend(x="bottom", inset=c(0, -.3), cex=.85, bty="n", horiz=T, xpd=T, pch=15,
@@ -60,8 +62,6 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
                     sprintf("%s: %s %%", L[1,1], L[1,3])), col = cols[2:4])
   
   axis(side = 4, las = 2) # Right y-axis
-  
-  grid(nx=NULL, ny=NULL, col = "grey", lty = "dotted", lwd = 1) # grid lines
   
   par(mar = c(8, 4, 3, 4)) # Define borders of the plot
   
