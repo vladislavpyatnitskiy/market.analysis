@@ -30,5 +30,8 @@ c.currency.converter.plt <- function(x, y, s = NULL, e = NULL){
   
   plot(C, las = 1, xlab = "Trading Days", ylab = y,
        main = sprintf("%s in %s", x[1], x[2])) # Plot
+  
+  grid(nx = 1, ny = NULL, lty = 3, col = "grey") # Horizontal lines
+  abline(h = 0)                              
 }
 c.currency.converter.plt(x = "BZ=F", y = "RUB=X") # Test
