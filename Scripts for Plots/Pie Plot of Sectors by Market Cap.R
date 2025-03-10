@@ -13,7 +13,7 @@ finviz.sectors.marketcap.pie <- function(x){ # Pie Plot with info about sectors
   
   d <- subset(d, select = -c(1)) # Reduce excessive column
   
-  colnames(d) <- c("Market Cap ($blns)") #
+  colnames(d) <- c("Market Cap ($blns)") # Column name
   
   for (n in 1:nrow(d)){ # Reduce "B" from Market Cap column values
     
@@ -24,18 +24,16 @@ finviz.sectors.marketcap.pie <- function(x){ # Pie Plot with info about sectors
   
   for (n in 1:ncol(d)){ d[,n] <- as.numeric(d[,n]) } # Make data numeric
   
-  tickers <- rownames(d) # Assign names for sectos
+  D <- round(d[,1] / sum(d[,1]), 2) * 100 # calculates percent
   
-  d <- round(d[,1] / sum(d[,1]), 2) * 100 # calculates percent
+  names(D) <- rownames(d) # Assign names for sectors
   
-  names(d) <- tickers # Assign names for sectors
-  
-  d <- sort(d, decreasing = T) # Sort sectors by portion sizes
+  D <- sort(D, decreasing = T) # Sort sectors by portion sizes
   
   C = c("#466791","#60bf37","#953ada","#4fbe6c","#ce49d3","#a7b43d","#5a51dc",
         "#d49f36","#552095","#507f2d","#db37aa","#84b67c","#a06fda","#df462a")
   
-  pie(d, labels = c(sprintf("%s %s%%", names(d), d)), col = C, radius = 2.75,
-      main = "Portions of Sectors in Market Cap", sub = "FINVIZ") # Plot
+  pie(D, labels = c(sprintf("%s %s%%", names(D), D)), col = C, radius = 1.5,
+      main = "Portions of US Sectors in Market Cap", sub = "FINVIZ") # Plot
 }
 finviz.sectors.marketcap.pie("groups.ashx?g=sector&v=120&o=name") # Test
