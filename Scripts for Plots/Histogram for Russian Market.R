@@ -19,7 +19,7 @@ rus.hist.plt.mrk.cap <- function(x){ # Histogram with Market Cap values
     
     for (n in 1:length(D)){ if (isTRUE(grepl(" ", D[n]))){
       
-      D[n] <- gsub(" ", "", D[n]) } } # Reduce gap in market cap
+        D[n] <- gsub(" ", "", D[n]) } } # Reduce gap in market cap
     
     colnames(D) <- c("Ticker", gsub("_", "/", toupper(x[m]))) # Column names
     
@@ -39,12 +39,11 @@ rus.hist.plt.mrk.cap <- function(x){ # Histogram with Market Cap values
        las = 1, col = "steelblue", breaks=100, sub="Data Source: smart-lab.ru",
        main = "Distribution of Russian Companies by Market Cap") # Plot
   
-  for (n in seq(0,10000,by=1000)){ abline(v = n, col = "grey", lty = 3) } # x &
-  for (n in seq(20, 200, 20)){ abline(h = n, col = "grey", lty = 3) } # y-axes
+  grid(nx = NULL, ny = NULL, col = "grey", lwd = 1) # Vertical lines
   
   abline(h = 0, col = "black") # Add vertical line at y = 0
   
-  axis(side = 4, at = seq(0, 200, 20), las = 2) # Set y-axis values
+  axis(side = 4, las = 2) # Set y-axis values
   
   par(mar = c(5, 5, 5, 5)) # Define borders of the plot
   
