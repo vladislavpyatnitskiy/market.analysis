@@ -25,3 +25,6 @@ Here are collected scripts enabling to get various financial data, plots and ana
 
 ![](https://github.com/vladislavpyatnitskiy/market.analysis/blob/main/Plots/Bar%20Plot%20IMOEX%20Stocks%20Returns.png?raw=true)
 #### Fig. 7. IMOEX Stock Returns
+
+![](https://github.com/vladislavpyatnitskiy/market.analysis/blob/main/Plots/Line%20Plot%20of%20Brent%20in%20Roubles.png?raw=true)
+#### Fig. 8. Brent Crude Oil Prices in Russian Roubles
