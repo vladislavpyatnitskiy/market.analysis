@@ -31,3 +31,6 @@ Here are collected scripts enabling to get various financial data, plots and ana
 
 ![](https://github.com/vladislavpyatnitskiy/market.analysis/blob/main/Plots/Plot%20of%20indices.png?raw=true)
 #### Fig. 9. Comparison of Indices' Performance
+
+![](https://github.com/vladislavpyatnitskiy/market.analysis/blob/main/Plots/Line%20Plot%20of%20Ratio.png?raw=true)
+#### Fig. 10. Ratio between two commodities throughout Trading Days
