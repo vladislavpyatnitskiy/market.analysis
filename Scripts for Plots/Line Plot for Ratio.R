@@ -13,7 +13,16 @@ ratio.plt <- function(x, y, s=NULL, e=NULL, main=NULL, ylab=NULL){
     if (is.null(s)) return(getSymbols(A, to = e, src=src, auto.assign=F)) 
     return(getSymbols(A, from = s, to = e, src=src, auto.assign=F)) 
   }
-  for (A in x){ p <- cbind(p, getData(A, s, e)[,4]) } # Join data
+  for (A in x){ p <- cbind(p, getData(A, s, e)[,4]) 
+  
+    message(
+      sprintf(
+        "%s is downloaded (%s / %s)", 
+        A, which(x == A), length(x)
+      )
+    ) # Download message
+    
+  } # Join data
   
   p <- p[apply(p, 1, function(x) all(!is.na(x))),] # Get rid of NA
   
@@ -23,13 +32,13 @@ ratio.plt <- function(x, y, s=NULL, e=NULL, main=NULL, ylab=NULL){
   
   C <- p[,2] / p[,1] # New column
   
-  m <- rownames(C[C < 0,])
+  if (!is.null(rownames(C[C < 0,]))){ m <- rownames(C[C < 0,])
   
-  C <- as.data.frame(C[apply(C, 1, function(row) all(row > 0))])
-  
-  R <- rownames(p)
-  
-  rownames(C) <- R[-grep(m, R)]
+    C <- as.data.frame(C[apply(C, 1, function(row) all(row > 0))])
+    
+    R <- rownames(p)
+    
+    rownames(C) <- R[-grep(m, R)] }
   
   C <- as.timeSeries(C)
   
@@ -45,12 +54,12 @@ ratio.plt <- function(x, y, s=NULL, e=NULL, main=NULL, ylab=NULL){
     xlab="Trading Days",
     ylab=ylab,
     main=main
-    ) # Plot
+  ) # Plot
   
   axis(side = 4, las = 2) # Right side y-axis values
   
   par(mar = rep(5, 4)) # Define borders of the plot
-
+  
   grid(nx = 1, ny = NULL, lty = 3, col = "grey") # Horizontal lines
   abline(h = 1)  
 }
