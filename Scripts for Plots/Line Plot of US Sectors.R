@@ -9,7 +9,7 @@ line.plt.sector <- function(data=T, s=NULL, e=NULL){
          "Materials", "Real Estate", "Utilities")
   
   if (data){ p <- NULL # data off
-    
+  
     src <- "yahoo" # Source for all indices but Russian
     
     getData1 <- function(A, s, e) {
@@ -18,7 +18,16 @@ line.plt.sector <- function(data=T, s=NULL, e=NULL){
       if (is.null(s)) return(getSymbols(A, to = e, src=src, auto.assign=F)) 
       return(getSymbols(A, from = s, to = e, src=src, auto.assign=F)) 
     }
-    for (A in x){ p <- cbind(p, getData1(A, s, e)[,4]) } # Join data
+    for (A in x){ p <- cbind(p, getData1(A, s, e)[,4]) 
+    
+      message(
+        sprintf(
+          "%s is downloaded (%s / %s)", 
+          A, which(x == A), length(x)
+        )
+      ) # Download message
+      
+    } # Join data
     
     p <- p[apply(p, 1, function(x) all(!is.na(x))),] # Eliminate NAs
     
@@ -41,7 +50,7 @@ line.plt.sector <- function(data=T, s=NULL, e=NULL){
     xlab = "Trading Days",
     ylab = "Returns (%)",
     main = "Performance of US Sectors"
-    )
+  )
   
   axis(side = 4, las = 2) # Right Y-Axis Values
   
@@ -53,16 +62,16 @@ line.plt.sector <- function(data=T, s=NULL, e=NULL){
   
   legend(
     x = "bottom",
-    inset = c(0, -.27),
+    inset = c(0, -.2),
     legend = colnames(DF),
     xpd = T,
     col = seq(ncol(DF)),
     lwd = 2,
-    cex = .5,
+    cex = .65,
     bty = "n",
     horiz = F,
     ncol = 6
-    )
+  )
   
   on.exit(par(par(no.readonly = T))) # Show legend with names
 }
