@@ -13,7 +13,16 @@ c.currency.converter.plt <- function(x, y, s = NULL, e = NULL, main = NULL){
     if (is.null(s)) return(getSymbols(A, to = e, src=src, auto.assign=F)) 
     return(getSymbols(A, from = s, to = e, src=src, auto.assign=F)) 
   }
-  for (A in x){ p <- cbind(p, getData(A, s, e)[,4]) } # Join data
+  for (A in x){ p <- cbind(p, getData(A, s, e)[,4]) 
+
+    message(
+      sprintf(
+        "%s is downloaded (%s / %s)", 
+        A, which(x == A), length(x)
+      )
+    ) # Download message
+               
+  } # Join data
   
   p <- p[apply(p, 1, function(x) all(!is.na(x))),] # Get rid of NA
   
