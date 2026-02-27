@@ -6,8 +6,10 @@ finviz.sectors.marketcap <- function(x){ # Data Frame with info about sectors
     html_nodes('table') %>% .[[8]] %>% html_nodes('tr') %>%
     html_nodes('td') %>% html_text()
   
-  d <- data.frame(y[seq(from = 2, to = length(y), by = 15)],
-                  y[seq(from = 3, to = length(y), by = 15)])
+  d <- data.frame(
+    y[seq(from = 2, to = length(y), by = 15)],
+    y[seq(from = 3, to = length(y), by = 15)]
+    )
   
   rownames(d) <- d[,1] # Assign row names
   
@@ -15,9 +17,15 @@ finviz.sectors.marketcap <- function(x){ # Data Frame with info about sectors
   
   colnames(d) <- c("Market Cap ($blns)") # Reduce "B" from Market Cap values
   
-  for (n in 1:nrow(d)){ d[n,1] <- read.fwf(textConnection(d[n,1]),
-                                           widths = c(nchar(d[n,1]) - 1, 1),
-                                           colClasses = "character")[,1] }
+  for (n in 1:nrow(d)){ 
+    
+    d[n,1] <- read.fwf(
+      textConnection(d[n,1]), 
+      widths = c(nchar(d[n,1]) - 1, 1),
+      colClasses = "character"
+      )[,1] 
+  }
+
   d <- as.data.frame(d) # Data frame
   
   for (n in 1:ncol(d)){ d[,n] <- as.numeric(d[,n]) } # Make data numeric
@@ -30,11 +38,25 @@ finviz.sectors.marketcap <- function(x){ # Data Frame with info about sectors
   
   d <- sort(d, decreasing = F) # Sort 
   
-  C = c("#466791","#60bf37","#953ada","#4fbe6c","#ce49d3","#a7b43d","#5a51dc",
-        "#d49f36","#552095","#507f2d","#db37aa","#84b67c","#a06fda","#df462a")
+  C = c(
+    "#466791","#60bf37","#953ada","#4fbe6c","#ce49d3","#a7b43d","#5a51dc",
+    "#d49f36","#552095","#507f2d","#db37aa","#84b67c","#a06fda","#df462a"
+    )
   
-  B <- barplot(d,names.arg=names(d),horiz=T,las=1,xlim=c(0, max(d) + 1), xpd=F,
-               col=C, main="US Sectors by Market Capitalisation in $Trillions")
+  par(mar = c(4, 11, 4, 4)) # Define borders of the plot
+  
+  B <- barplot(
+    d,
+    names.arg = names(d),
+    horiz = T,
+    las = 1,
+    xlim = c(0, max(d) + 1), 
+    xpd=F,
+    col=C, 
+    main = sprintf(
+      "US Sectors by Market Capitalisation in $Trillions on %s",
+      as.Date(Sys.Date()))
+    )
   
   grid(nx = NULL, ny = 1, col = "grey", lwd = 1) # Vertical lines
   abline(h = B, col = "grey", lty = 3) # Horizontal lines
@@ -42,11 +64,20 @@ finviz.sectors.marketcap <- function(x){ # Data Frame with info about sectors
   vals = list(list(mean(d), median(d)), c("red", "green")) # Mean & Median 
   for (n in 1:2){ abline(v = vals[[1]][[n]], col = vals[[2]][n], lwd = 3) }
   
-  par(mar = c(4, 11, 4, 4)) # Define borders of the plot
-  
-  legend(x="bottom", inset=c(0,-.22), cex=.9, bty="n", horiz=T, col=vals[[2]],
-         legend=c((sprintf("Mean: %s",round(mean(d), 2))),
-                  sprintf("Median: %s",round(median(d), 2))), xpd=T, pch=15)
+  legend(
+    x = "bottom", 
+    inset = c(0, -.22), 
+    cex = .9, 
+    bty = "n", 
+    horiz = T, 
+    col = vals[[2]],
+    xpd=T, pch=15,
+    legend = c(
+      (
+        sprintf("Mean: %s",round(mean(d), 2))),
+        sprintf("Median: %s",round(median(d), 2))
+      )
+    )
   
   box() # Make borders for plot
 }
