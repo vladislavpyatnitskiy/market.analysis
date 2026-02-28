@@ -35,12 +35,12 @@ c.currency.converter.plt <- function(x, y, s = NULL, e = NULL, main = NULL){
   colnames(C) <- sprintf("%s in %s", x[1], x[2]) # Column name
   
   if (is.null(main)){ main = sprintf("%s in %s", x[1], x[2]) }
-  
+
+  par(mar = rep(5, 4)) # Define borders of the plot
+               
   plot(C, las = 1, xlab = "Trading Days", ylab = y, main = main) # Plot
   
   axis(side = 4, las = 2) # Right side y-axis values
-  
-  par(mar = c(5, 5, 5, 5)) # Define borders of the plot
   
   grid(nx = 1, ny = NULL, lty = 3, col = "grey") # Horizontal lines
   abline(h = 0)                              
