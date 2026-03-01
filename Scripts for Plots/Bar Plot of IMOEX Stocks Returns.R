@@ -7,10 +7,17 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
   
   l <- NULL # Get data of positive and negative returns
   
-  for (n in 0:length(f)){ v <- gsub('["\n"]', '', gsub('["\t"]', '',f[7+17*n]))
+  for (n in 0:length(f)){ 
     
-    v <- as.character(read.fwf(textConnection(v), widths = c(nchar(v) - 1, 1),
-                               colClasses = "character")[1])
+    v <- gsub('["\n"]', '', gsub('["\t"]', '', f[7 + 17 * n]))
+    
+    v <- as.character(
+      read.fwf(
+        textConnection(v), 
+        widths = c(nchar(v) - 1, 1),
+        colClasses = "character"
+        )[1]
+      )
     
     if (isTRUE(grepl("\\+", v))){ v <- as.numeric(gsub("\\+", "", v)) }
     
@@ -35,16 +42,31 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
   
     P <- gsub('["\n"]', '', gsub('["\t"]', '', d[8]))
     
-    P <- as.character(read.fwf(textConnection(P), widths = c(nchar(P) - 1, 1),
-                               colClasses = "character")[1])
+    P <- as.character(
+      read.fwf(
+        textConnection(P), 
+        widths = c(nchar(P) - 1, 1),
+        colClasses = "character"
+        )[1]
+      )
     
     if (isTRUE(grepl("\\+", P))){ P <- as.numeric(gsub("\\+", "", P)) }
     
     L <- rbind.data.frame(L, cbind(d[3], d[7], P)) } # ticker, price & %
     
-  plt <- barplot(l,names.arg=names(l),main="IMOEX Stocks Returns for Today (%)", 
-                 col = c(rep("green4", length(l) - sum(l < 0)),
-                         rep("red3", sum(l < 0))), horiz = F, las = 2)
+  par(mar = c(8, 4, 3, 4)) # Define borders of the plot
+  
+  plt <- barplot(
+    l,
+    names.arg = names(l),
+    main = "IMOEX Stocks Returns for Today (%)", 
+    horiz = F, 
+    las = 2,
+    col = c(
+      rep("green4", length(l) - sum(l < 0)),
+      rep("red3", sum(l < 0))
+      )
+    )
   
   # Break even line, horizontal lines, Mean, Median and IMOEX values
   nums = list(0, mean(l), median(l), L[1,3])
@@ -56,14 +78,24 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
   grid(nx = 1, ny = NULL, col = "grey", lty = "dotted", lwd = 1) 
   for (n in 1:4){ abline(h=nums[[n]], col=cols[n], lwd=lwds[n], lty=ltys[n]) }
   
-  legend(x="bottom", inset=c(0, -.3), cex=.85, bty="n", horiz=T, xpd=T, pch=15,
-         legend = c((sprintf("Mean: %s %%", round(mean(l), 2))),
-                    sprintf("Median: %s %%", round(median(l), 2)),
-                    sprintf("%s: %s %%", L[1,1], L[1,3])), col = cols[2:4])
+  legend(
+    x = "bottom", 
+    inset = c(0, -.21), 
+    cex = .85, 
+    bty = "n", 
+    horiz = T, 
+    xpd = T, 
+    pch = 15,
+    col = cols[2:4],
+    legend = c(
+      (
+        sprintf("Mean: %s %%", round(mean(l), 2))),
+        sprintf("Median: %s %%", round(median(l), 2)),
+        sprintf("%s: %s %%", L[1,1], L[1,3])
+      )
+    )
   
   axis(side = 4, las = 2) # Right y-axis
-  
-  par(mar = c(8, 4, 3, 4)) # Define borders of the plot
   
   box() # Borders
 }
