@@ -54,7 +54,9 @@ bar.plt.sector.cor <- function(data=T){
         "#55baad","#dc4555","#62aad3","#8c3025","#417d61","#862977","#bba672",
         "#403367","#da8a6d","#a79cd4","#71482c","#c689d0","#6b2940","#d593a7",
         "#895c8b","#bd5975") # Add colour range & Create barplot
-  
+
+  par(mar = c(10, rep(5, 3)) # Define borders of the plot
+      
   B <- barplot(
     l[,1],
     names.arg = rownames(l),
@@ -72,8 +74,6 @@ bar.plt.sector.cor <- function(data=T){
   
   for (n in p.seq){ abline(h = n, col ="grey", lty = 3) } # Horizontal lines
   abline(v = B, col = "grey", lty = 3) # Vertical lines
-  
-  par(mar = c(10, 5, 5, 5)) # Define borders of the plot
   
   box() # Add box
 }
