@@ -34,6 +34,8 @@ rus.hist.plt.mrk.cap <- function(x){ # Histogram with Market Cap values
   for (n in 1:ncol(l)){ l[,n] <- as.numeric(l[,n]) } # Make data numeric
   
   l <- l[row.names(l) != "OMZZ", , drop = F][,1] # Drop False value
+
+  par(mar = c(5, 5, 5, 5)) # Define borders of the plot
   
   hist(l, freq = T, xlab = "Market Cap in Billions of Roubles", border="white",
        las = 1, col = "steelblue", breaks=100, sub="Data Source: smart-lab.ru",
@@ -44,8 +46,6 @@ rus.hist.plt.mrk.cap <- function(x){ # Histogram with Market Cap values
   abline(h = 0, col = "black") # Add vertical line at y = 0
   
   axis(side = 4, las = 2) # Set y-axis values
-  
-  par(mar = c(5, 5, 5, 5)) # Define borders of the plot
   
   box() # Define borders
 }
