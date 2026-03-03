@@ -69,6 +69,8 @@ smartlab.bar.plt.marketcap <- function(y){ # Portfolio Securities by Market Cap
   df <- df[match(k, df$Level),] # Change Order of Market Caps
   
   C = c("#466791","#df462a","#4fbe6c","#ce49d3","#a7b43d","#5a51dc") # Colours
+
+  par(mar = rep(5, 4)) # Define borders of the plot
   
   B <- barplot(df[,2], names.arg=df[,1], horiz=F, las=1, xpd=F, col=C,
                main = "Distribution of Public Companies by Market Cap Levels",
@@ -79,8 +81,6 @@ smartlab.bar.plt.marketcap <- function(y){ # Portfolio Securities by Market Cap
   grid(nx = 1, ny = NULL, lty = 3, col = "grey") # Horizontal lines
   abline(v = B, col ="grey",lty = 3) # Put vertical lines
   abline(h = 0) # Horizontal line
-  
-  par(mar = c(5, 5, 5, 5)) # Define borders of the plot
   
   box() # Borders
 }
