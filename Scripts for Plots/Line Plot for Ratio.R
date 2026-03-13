@@ -47,7 +47,9 @@ ratio.plt <- function(x, y, s=NULL, e=NULL, main=NULL, ylab=NULL){
   if (is.null(main)) main = sprintf("Ratio of %s to %s", x[2], x[1]) 
   
   if (is.null(ylab)) ylab = sprintf("%s to %s", x[2], x[1])
-  
+
+  par(mar = rep(5, 4)) # Define borders of the plot
+                               
   plot(
     C,
     las = 1,
@@ -57,8 +59,6 @@ ratio.plt <- function(x, y, s=NULL, e=NULL, main=NULL, ylab=NULL){
   ) # Plot
   
   axis(side = 4, las = 2) # Right side y-axis values
-  
-  par(mar = rep(5, 4)) # Define borders of the plot
   
   grid(nx = 1, ny = NULL, lty = 3, col = "grey") # Horizontal lines
   abline(h = 1)  
