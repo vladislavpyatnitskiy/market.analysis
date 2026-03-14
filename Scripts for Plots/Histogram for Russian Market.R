@@ -35,7 +35,7 @@ rus.hist.plt.mrk.cap <- function(x){ # Histogram with Market Cap values
   
   l <- l[row.names(l) != "OMZZ", , drop = F][,1] # Drop False value
 
-  par(mar = c(5, 5, 5, 5)) # Define borders of the plot
+  par(mar = rep(5, 4)) # Define borders of the plot
   
   hist(l, freq = T, xlab = "Market Cap in Billions of Roubles", border="white",
        las = 1, col = "steelblue", breaks=100, sub="Data Source: smart-lab.ru",
