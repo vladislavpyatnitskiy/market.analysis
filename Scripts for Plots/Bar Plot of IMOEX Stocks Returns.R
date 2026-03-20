@@ -1,6 +1,6 @@
 library(rvest) # Library
 
-bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
+bar.plt.imoex <- function(){ # Bar Plot with IMOEX Stocks Returns
   
   f <- read_html(x) %>% html_nodes('body') %>% html_nodes('table') %>%
     html_nodes('tr') %>% html_nodes('td') %>% html_text() # Read HTML
@@ -99,4 +99,4 @@ bar.plt.imoex <- function(x){ # Bar Plot with IMOEX Stocks Returns
   
   box() # Borders
 }
-bar.plt.imoex("https://smart-lab.ru/q/index_stocks/IMOEX/") # Test
+bar.plt.imoex() # Test
