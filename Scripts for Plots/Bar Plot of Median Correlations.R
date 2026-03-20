@@ -1,6 +1,6 @@
 lapply(c("quantmod", "timeSeries"), require, character.only = T) # Libraries
 
-bar.plt.sector.cor <- function(data=T){
+bar.plt.sector.cor <- function(){
   
   x <- c("XLC","XLY","XLP","XLE","XLF","XLV","XLI","XLK","XLB","XLRE","XLU")
   
@@ -77,4 +77,4 @@ bar.plt.sector.cor <- function(data=T){
   
   box() # Add box
 }
-bar.plt.sector.cor(T)
+bar.plt.sector.cor()
