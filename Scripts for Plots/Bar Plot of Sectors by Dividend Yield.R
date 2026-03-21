@@ -1,6 +1,8 @@
 library("rvest") # Library
 
-finviz.sectors.dividends.bar <- function(x){ # Bar Plot with Dividend Yields
+finviz.sectors.dividends.bar <- function(){ # Bar Plot with Dividend Yields
+
+  x <- "groups.ashx?g=sector&v=110&o=name"
   
   y <- read_html(sprintf("https://finviz.com/%s", x)) %>%
     html_nodes('table') %>% .[[8]] %>% html_nodes('tr') %>%
@@ -79,4 +81,4 @@ finviz.sectors.dividends.bar <- function(x){ # Bar Plot with Dividend Yields
 
   box() # Make borders for plot
 }
-finviz.sectors.dividends.bar("groups.ashx?g=sector&v=110&o=name") # Test
+finviz.sectors.dividends.bar() # Test
